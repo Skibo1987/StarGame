@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.pool.impl.BulletPool;
 import ru.geekbrains.screen.BaseScreen;
 import ru.geekbrains.sprite.impl.Background;
 import ru.geekbrains.sprite.impl.MainShip;
@@ -18,11 +19,14 @@ public class GameScreen extends BaseScreen {
     private Vector2 touch;
     private Vector2 v;
     private Background background;
+
+    private BulletPool bulletPool;
     private static final int STAR_COUNT = 256;
 
     private TextureAtlas atlas;
     private Star[] stars;
     private MainShip mainShip;
+
 
 
     @Override
@@ -32,11 +36,12 @@ public class GameScreen extends BaseScreen {
         background = new Background(bg);
 //        ship = new TextureAtlas("mainAtlas.tpack");
         atlas = new TextureAtlas("mainAtlas.tpack");
+        bulletPool = new BulletPool();
         stars = new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(atlas);
         }
-        mainShip = new MainShip(atlas);
+        mainShip = new MainShip(atlas,bulletPool);
         touch = new Vector2();
         v = new Vector2(1, 1);
     }
@@ -46,6 +51,7 @@ public class GameScreen extends BaseScreen {
         super.render(delta);
 //        batch.begin();
         update(delta);
+        freeAllDestroyed();
         draw();
 
 //        batch.draw(mainShip,touch.x,touch.y);
@@ -68,6 +74,7 @@ public class GameScreen extends BaseScreen {
         super.dispose();
         bg.dispose();
         atlas.dispose();
+        bulletPool.dispose();
 //        ship.dispose();
     }
 
@@ -105,7 +112,13 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.update(delta);
         }
+
         mainShip.update(delta);
+        bulletPool.updateActiveSprites(delta);
+    }
+
+    private void freeAllDestroyed(){
+        bulletPool.freeAllDestroyed();
     }
 
     private void draw() {
@@ -116,6 +129,7 @@ public class GameScreen extends BaseScreen {
             star.draw(batch);
         }
         mainShip.draw(batch);
+        bulletPool.drawActiveSprites(batch);
         batch.end();
     }
 
