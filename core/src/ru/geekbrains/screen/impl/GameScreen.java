@@ -7,11 +7,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.List;
+
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.impl.BulletPool;
 import ru.geekbrains.pool.impl.EnemyPool;
 import ru.geekbrains.screen.BaseScreen;
 import ru.geekbrains.sprite.impl.Background;
+import ru.geekbrains.sprite.impl.EnemyShip;
 import ru.geekbrains.sprite.impl.MainShip;
 import ru.geekbrains.sprite.impl.Star;
 import ru.geekbrains.sprite.util.EnemyEmitter;
@@ -72,6 +75,7 @@ public class GameScreen extends BaseScreen {
         super.render(delta);
 //        batch.begin();
         update(delta);
+        checkCollisions();
         freeAllDestroyed();
         draw();
 
@@ -142,6 +146,19 @@ public class GameScreen extends BaseScreen {
         bulletPool.updateActiveSprites(delta);
         enemyPool.updateActiveSprites(delta);
         enemyEmitter.generate(delta);
+    }
+
+    private void checkCollisions(){
+        List<EnemyShip> enemyShipList = enemyPool.getActiveObjects();
+        for (EnemyShip enemyShip : enemyShipList){
+            if (enemyShip.isDestroyed()){
+                continue;
+            }
+            float minDist = (mainShip.getWidth()+enemyShip.getWidth())*0.5f;
+            if (mainShip.pos.dst(enemyShip.pos) < minDist){
+                enemyShip.destroy();
+            }
+        }
     }
 
     private void freeAllDestroyed(){
