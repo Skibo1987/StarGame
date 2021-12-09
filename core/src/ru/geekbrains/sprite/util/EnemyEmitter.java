@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-import java.util.Random;
 
-import ru.geekbrains.math.MatrixUtils;
+
+
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.impl.EnemyPool;
 import ru.geekbrains.sprite.impl.EnemyShip;
