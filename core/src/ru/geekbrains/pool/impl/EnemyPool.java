@@ -7,12 +7,13 @@ import ru.geekbrains.pool.SpritesPool;
 import ru.geekbrains.sprite.impl.EnemyShip;
 
 public class EnemyPool extends SpritesPool<EnemyShip> {
-
+    private final ExplosionPool explosionPool;
     private final BulletPool bulletPool;
     private final Sound bulletSound;
     private Rect worldBounds;
 
-    public EnemyPool(BulletPool bulletPool, Sound bulletSound, Rect worldBounds) {
+    public EnemyPool(ExplosionPool explosionPool, BulletPool bulletPool, Sound bulletSound, Rect worldBounds) {
+        this.explosionPool = explosionPool;
         this.bulletPool = bulletPool;
         this.bulletSound = bulletSound;
         this.worldBounds = worldBounds;
@@ -20,6 +21,6 @@ public class EnemyPool extends SpritesPool<EnemyShip> {
 
     @Override
     protected EnemyShip newObject() {
-        return new EnemyShip(bulletPool, bulletSound, worldBounds);
+        return new EnemyShip(explosionPool, bulletPool, bulletSound, worldBounds);
     }
 }
