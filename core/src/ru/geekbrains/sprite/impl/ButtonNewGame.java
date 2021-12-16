@@ -12,6 +12,7 @@ public class ButtonNewGame extends BaseButton {
 
     private final GameScreen gameScreen;
     private static final float HEIGHT = 0.05f;
+    private static final float MARGIN = -0.04f;
 
     public ButtonNewGame(TextureAtlas atlas,GameScreen gameScreen) {
         super(atlas.findRegion("button_new_game"));
@@ -24,7 +25,7 @@ public class ButtonNewGame extends BaseButton {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         setHeightProtection(HEIGHT);
-        setBottom(-0.01f);
+        setBottom(MARGIN);
     }
 
     @Override
